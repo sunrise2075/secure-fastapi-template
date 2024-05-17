@@ -17,11 +17,24 @@ task_dao = TaskDAO(
     database=config.get("database", "database.dbname")
 )
 
-try:
-    user_dao.connect()
-    print("User DB connection successful")
 
-    task_dao.connect()
-    print("task DB connection successful")
-except Exception as e:
-    print("DB connection error:", e)
+def connect_all():
+    try:
+        user_dao.connect()
+        print("User DB connection open successfully")
+
+        task_dao.connect()
+        print("task DB connection open successfully")
+    except Exception as e:
+        print("DB connection error:", e)
+
+
+def dis_connect_all():
+    try:
+        user_dao.disconnect()
+        print("User DB connection closing successfully")
+
+        task_dao.disconnect()
+        print("task DB connection closing successfully")
+    except Exception as e:
+        print("DB connection closing error:", e)

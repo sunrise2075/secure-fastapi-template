@@ -4,6 +4,7 @@
 #  -H 'accept: application/json'
 #  -H 'Content-Type: application/x-www-form-urlencoded'
 #  -d 'username=admin2&email=admin2%40163.com&password=123456'
+# @name Register
 POST http://localhost:8000/api/auth/register?is_admin=true
 accept: application/json
 Content-Type: application/x-www-form-urlencoded
@@ -21,6 +22,7 @@ password = 123456
 #  -H 'accept: application/json'
 #  -H 'Content-Type: application/x-www-form-urlencoded'
 #  -d 'grant_type=&username=admin&password=123456&scope=&client_id=&client_secret='
+# @name  Login
 POST http://localhost:8000/api/auth/login
 accept: application/json
 Content-Type: application/x-www-form-urlencoded
@@ -37,13 +39,15 @@ client_secret=
 ###
 
 
-### Authorization by token, part 1. Logout and clear token.
+### Get all tasks.
+# @name Get all tasks
 GET http://127.0.0.1:8000/api/task/all
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
-
+###
 
 ### Authorization by token, part 1. Logout and clear token.
+# @name Logout
 POST http://127.0.0.1:8000/api/auth/logout
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
