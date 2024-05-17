@@ -53,7 +53,22 @@ mysql -u root -p
 
 ```sql
 CREATE DATABASE fastapi;
+
+use fastapi;
+
+create table users
+(
+    id              int auto_increment
+        primary key,
+    username        varchar(256)         null,
+    email           varchar(256)         null,
+    is_admin        tinyint(1) default 0 null,
+    hashed_password varchar(512)         null
+);
+
 ```
+
+
 
 4. Create a `.env` file in the root directory and add the following environment variables
 
