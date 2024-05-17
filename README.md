@@ -66,6 +66,12 @@ create table users
     hashed_password varchar(512)         null
 );
 
+create table blacklist
+(
+    token        varchar(512) not null,
+    blacklist_on datetime     null
+);
+
 ```
 
 
