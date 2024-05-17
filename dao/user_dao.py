@@ -52,10 +52,11 @@ class UserDAO(BaseDao):
         """
         try:
             cursor = self.cnx.cursor()
-            query = "INSERT INTO blacklist (token, blacklisted_on) VALUES (%s, %s)"
+            query = "INSERT INTO blacklist (token, blacklist_on) VALUES (%s, %s)"
             timestamp = datetime.now()
-            values = (token, timestamp)
-            cursor.execute(query, values)
+
+            cursor.execute(query, [token, timestamp])
+
             self.cnx.commit()
             cursor.close()
         except mysql.connector.Error as err:

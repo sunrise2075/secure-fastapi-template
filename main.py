@@ -15,4 +15,4 @@ async def app_startup():
 
 @app.on_event("shutdown")
 async def app_shutdown():
-    await dis_connect_all()
+    dis_connect_all()

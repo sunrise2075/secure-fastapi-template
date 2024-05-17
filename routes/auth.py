@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from models.user_model import UserInDB
 
-from auth.authorize import authenticate_user, oauth2_scheme
+from auth.authorize import authenticate_user, oauth2_scheme, get_current_user
 from auth.hashing import get_password_hash, ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token, blacklist_token
 from services.user_service import user_exists, get_next_avail_id, add_new_user
 
@@ -108,7 +108,7 @@ async def login_for_access_token(
 
 
 @router.post("/logout")
-async def logout(token: str = Depends(oauth2_scheme)):
+async def logout(token: Annotated[str, Depends(oauth2_scheme)], current_user: Annotated[UserInDB, Depends(get_current_user)]):
     """
     The endpoint for logging out a user
 
@@ -118,5 +118,6 @@ async def logout(token: str = Depends(oauth2_scheme)):
     Returns:
         (dict) The message for logging out
     """
-    blacklist_token(token)
+    if current_user is not None:
+        blacklist_token(token)
     return {"message": "Successfully logged out"}

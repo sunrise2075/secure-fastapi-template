@@ -51,3 +51,10 @@ Authorization: Bearer {{access_token}}
 POST http://127.0.0.1:8000/api/auth/logout
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+
+> {%
+    client.global.clear("access_token");
+    console.log(client.global.get("access_token"))
+%}
+###
