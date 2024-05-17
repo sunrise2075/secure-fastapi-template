@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 import mysql.connector
 from mysql.connector import errorcode
@@ -48,7 +49,7 @@ class UserDAO:
         self.cnx.commit()
         cursor.close()
 
-    def get_user_by_username(self, username: str) -> UserInDB | None:
+    def get_user_by_username(self, username: str) -> Optional[UserInDB]:
         cursor = self.cnx.cursor()
         query = ("SELECT id, username, email, is_admin, hashed_password "
                  "FROM users "
