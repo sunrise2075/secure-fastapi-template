@@ -96,6 +96,8 @@ http://127.0.0.1:8000/auth/login
 
 http://127.0.0.1:8000/docs
 
+create a user with `admin` as username and `123456` as password
+
 ## Contributing
 
 If you'd like to contribute to this project, please check the contribution guidelines for more information.

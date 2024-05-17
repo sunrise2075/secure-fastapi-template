@@ -1,27 +1,43 @@
 ### Create user by registering
-POST http://127.0.0.1:8000/api/auth/register
-Content-Type: application/json
+# curl -X 'POST'
+#  'http://localhost:8000/api/auth/register?is_admin=true'
+#  -H 'accept: application/json'
+#  -H 'Content-Type: application/x-www-form-urlencoded'
+#  -d 'username=admin2&email=admin2%40163.com&password=123456'
+POST http://localhost:8000/api/auth/register?is_admin=true
+accept: application/json
+Content-Type: application/x-www-form-urlencoded
 
-{
-  "username": "admin",
-  "email": "admin@163.com",
-  "password": "123456",
-  "is_admin": false
-}
+username = admin3 &
+email = admin2%40163.com &
+password = 123456
+
+###
 
 
 ### Authorization by token, part 1. Retrieve and save token.
-POST http://127.0.0.1:8000/api/auth/login
-Content-Type: application/json
+# curl -X 'POST'
+#  'http://localhost:8000/api/auth/login'
+#  -H 'accept: application/json'
+#  -H 'Content-Type: application/x-www-form-urlencoded'
+#  -d 'grant_type=&username=admin&password=123456&scope=&client_id=&client_secret='
+POST http://localhost:8000/api/auth/login
+accept: application/json
+Content-Type: application/x-www-form-urlencoded
 
-{
-  "token": "my-secret-token"
-}
-
-> {% client.global.set("auth_token", response.body.json.token); %}
-
-#### Authorization by token, part 2. Use token to authorize.
-GET http://127.0.0.1:8000/api/
-Authorization: Bearer {{auth_token}}
-
+grant_type = &
+username= admin &
+password= 123456 &
+scope= &
+client_id= &
+client_secret=
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
 ###
+
+
+### Authorization by token, part 1. Logout and clear token.
+POST http://127.0.0.1:8000/api/auth/logout
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
