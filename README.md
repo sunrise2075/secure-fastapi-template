@@ -98,6 +98,17 @@ http://127.0.0.1:8000/docs
 
 create a user with `admin` as username and `123456` as password
 
+We need consider more issues as follows:
+
+1. connection pool
+2. sql injection
+3. orm framework
+4. http security config
+5. unit test
+6. code generation
+7. app scale up
+8. db cluster mgmt
+
 ## Contributing
 
 If you'd like to contribute to this project, please check the contribution guidelines for more information.

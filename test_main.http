@@ -38,6 +38,12 @@ client_secret=
 
 
 ### Authorization by token, part 1. Logout and clear token.
+GET http://127.0.0.1:8000/api/task/all
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### Authorization by token, part 1. Logout and clear token.
 POST http://127.0.0.1:8000/api/auth/logout
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
