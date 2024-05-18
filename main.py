@@ -1,11 +1,10 @@
 from fastapi import FastAPI
 
-from routes import auth, task
 from services.database_service import dis_connect_all, connect_all
+from routes import router as api_routers
 
 app = FastAPI()
-app.include_router(auth.router)
-app.include_router(task.router)
+app.include_router(api_routers)
 
 
 @app.on_event("startup")
