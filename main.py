@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from services.pooled_conn_service import get_db, engine, Base
-from services.database_service import dis_connect_all, connect_all
+from services.pooled_db_service import get_db, engine, Base
+from services.db_service import dis_connect_all, connect_all
 from routes import router as api_routers
 
 app = FastAPI()

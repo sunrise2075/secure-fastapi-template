@@ -1,6 +1,6 @@
 from models.user_model import User
 
-from services.database_service import user_dao
+from services.db_service import user_dao
 
 
 def add_new_user(user: User):

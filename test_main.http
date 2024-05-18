@@ -55,6 +55,5 @@ Authorization: Bearer {{access_token}}
 
 > {%
     client.global.clear("access_token");
-    console.log(client.global.get("access_token"))
 %}
 ###

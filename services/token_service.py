@@ -1,4 +1,4 @@
-from services.database_service import user_dao
+from services.db_service import user_dao
 
 
 def add_token_to_blacklist(token: str):
