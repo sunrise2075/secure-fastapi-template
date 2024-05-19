@@ -115,6 +115,8 @@ We need consider more issues as follows:
 7. app scale up
 8. db cluster mgmt
 
+https://www.geeksforgeeks.org/how-to-update-existing-table-rows-in-sqlalchemy-in-python/?ref=ml_lbp
+
 ## Contributing
 
 If you'd like to contribute to this project, please check the contribution guidelines for more information.
