@@ -46,6 +46,14 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 ###
 
+### Get task by id.
+# @name Get task by id
+GET http://127.0.0.1:8000/api/task/2
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+###
+
+
 ### Authorization by token, part 1. Logout and clear token.
 # @name Logout
 POST http://127.0.0.1:8000/api/auth/logout
