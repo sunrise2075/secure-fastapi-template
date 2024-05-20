@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root12345
+      MYSQL_USER: fastapi_user
+      MYSQL_PASSWORD: test12345
+      MYSQL_DATABASE: fastapi
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./sql/init_sql.sql:/docker-entrypoint-initdb.d/init_sql.sql
