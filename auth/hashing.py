@@ -2,10 +2,11 @@ from datetime import datetime, timedelta
 
 from jose import jwt
 from passlib.context import CryptContext
+from sqlalchemy.ext.asyncio import AsyncSession
 
 import config
 
-from services.token_service import add_token_to_blacklist, check_if_token_is_blacklisted
+from services.token_service import TokenService
 
 """
     middleware for hashing passwords and creating tokens
@@ -37,9 +38,9 @@ def create_access_token(data: dict, expires_delta: int = None):
     return encoded_jwt
 
 
-def blacklist_token(token):
-    add_token_to_blacklist(token)
+async def blacklist_token(token, db: AsyncSession):
+    return await TokenService.add_token_to_blacklist(token, db)
 
 
-def is_token_blacklisted(token):
-    return check_if_token_is_blacklisted(token)
+async def is_token_blacklisted(token, db: AsyncSession):
+    return await TokenService.check_if_token_is_blacklisted(token, db)

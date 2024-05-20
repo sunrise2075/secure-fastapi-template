@@ -4,12 +4,14 @@ from typing import Annotated
 
 from fastapi import APIRouter, Form, HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from models.user_model import UserInDB
+from models.user_model import User
 
 from auth.authorize import authenticate_user, oauth2_scheme, get_current_user
 from auth.hashing import get_password_hash, ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token, blacklist_token
-from services.user_service import user_exists, get_next_avail_id, add_new_user
+from services.pooled_db_service import get_db
+from services.user_service import UserService
 
 """
     API router for auth endpoint
@@ -40,7 +42,7 @@ async def register_user(
         username: str = Form(...),
         email: str = Form(...),
         password: str = Form(...),
-        is_admin=False
+        is_admin: bool = Form(...), db: AsyncSession = Depends(get_db)
 ):
     """
     The endpoint for registering a new user
@@ -57,26 +59,31 @@ async def register_user(
     Raises:
         HTTPException: if the username already exists
     """
-    if user_exists(username):
+    user_exist: bool = await UserService.user_exists(username, db)
+    if user_exist:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already exists",
         )
+
     hashed_password = get_password_hash(password)
-    user = UserInDB(
-        id=get_next_avail_id(),
+
+    new_id: int = await UserService.get_next_avail_id(db)
+    user = User(
+        id=new_id,
         username=username,
         email=email,
         hashed_password=hashed_password,
         is_admin=is_admin,
     )
-    add_new_user(user)
+    await UserService.add_new_user(user, db)
     return user
 
 
 @router.post("/login")
 async def login_for_access_token(
-        form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+        form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+        db: AsyncSession = Depends(get_db)
 ):
     """
     The endpoint for logging in a user
@@ -90,7 +97,7 @@ async def login_for_access_token(
     Raises:
         HTTPException: if the username or password is incorrect
     """
-    user = authenticate_user(form_data.username, form_data.password)
+    user: User = await authenticate_user(form_data.username, form_data.password, db)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -108,7 +115,8 @@ async def login_for_access_token(
 
 
 @router.post("/logout")
-async def logout(token: Annotated[str, Depends(oauth2_scheme)], current_user: Annotated[UserInDB, Depends(get_current_user)]):
+async def logout(token: Annotated[str, Depends(oauth2_scheme)],
+                 current_user: Annotated[User, Depends(get_current_user)], db: AsyncSession = Depends(get_db)):
     """
     The endpoint for logging out a user
 
@@ -119,5 +127,5 @@ async def logout(token: Annotated[str, Depends(oauth2_scheme)], current_user: An
         (dict) The message for logging out
     """
     if current_user is not None:
-        blacklist_token(token)
+        await blacklist_token(token, db)
     return {"message": "Successfully logged out"}

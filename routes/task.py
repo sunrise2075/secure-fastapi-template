@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from auth.authorize import get_current_user
 from models.task_model import Task
-from models.user_model import UserInDB
+from models.user_model import User
 from services.pooled_db_service import get_db
 
 """
@@ -31,7 +31,7 @@ oauth2_scheme2 = OAuth2PasswordBearer(tokenUrl="http://127.0.0.1:8000/task/all")
 
 
 @router.get("/all")
-async def get_all_task(current_user: Annotated[UserInDB, Depends(get_current_user)], db: AsyncSession = Depends(get_db)):
+async def get_all_task(current_user: Annotated[User, Depends(get_current_user)], db: AsyncSession = Depends(get_db)):
     """
     The endpoint for getting a list of task
 
@@ -50,7 +50,7 @@ async def get_all_task(current_user: Annotated[UserInDB, Depends(get_current_use
 
 
 @router.get("/{id}")
-async def get_all_task(id: int, current_user: Annotated[UserInDB, Depends(get_current_user)], db: AsyncSession = Depends(get_db)):
+async def get_all_task(id: int, current_user: Annotated[User, Depends(get_current_user)], db: AsyncSession = Depends(get_db)):
     """
     The endpoint for getting tas by id
 

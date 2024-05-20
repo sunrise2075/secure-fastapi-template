@@ -2,78 +2,54 @@ from datetime import datetime
 from typing import Optional
 
 import mysql.connector
-from mysql.connector import errorcode
+from sqlalchemy import select, text
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from dao.base_dao import BaseDao
-from models.user_model import User, UserInDB
+from models.blacklist_model import Blacklist
+from models.user_model import User
 
 """
     middleware for accessing the user database and performing CRUD operations on the user table
 """
 
 
-class UserDAO(BaseDao):
+class UserDAO:
 
-    def create_user(self, user: User):
-        cursor = self.cnx.cursor()
-        add_user = ("INSERT INTO users "
-                    "(id, username, email, is_admin, hashed_password) "
-                    "VALUES (%s, %s, %s, %s, %s)")
-        data_user = (user.id, user.username, user.email, user.is_admin, user.hashed_password)
-        cursor.execute(add_user, data_user)
-        self.cnx.commit()
-        cursor.close()
+    @staticmethod
+    async def create_user(new_user: User, db: AsyncSession):
+        db.add(new_user)
+        await db.commit()
+        await db.refresh(new_user)
+        return new_user
 
-    def get_user_by_username(self, username: str) -> Optional[UserInDB]:
-        cursor = self.cnx.cursor()
-        query = ("SELECT id, username, email, is_admin, hashed_password "
-                 "FROM users "
-                 "WHERE username = %s")
-        cursor.execute(query, (username,))
-        row = cursor.fetchone()
-        cursor.close()
-        if row is None:
-            return None
-        return UserInDB(**dict(zip(['id', 'username', 'email', 'is_admin', 'hashed_password'], row)))
+    @staticmethod
+    async def get_user_by_username(username: str, db: AsyncSession) -> Optional[User]:
+        result = await db.execute(select(User).filter(User.username == username))
+        user: User = result.scalars().one_or_none()
+        return user
 
-    def get_last_user_id(self) -> int:
-        cursor = self.cnx.cursor()
-        query = "SELECT MAX(id) FROM users"
-        cursor.execute(query)
-        row = cursor.fetchone()
-        cursor.close()
-        if row is None:
-            return 0
-        return row[0]
+    @staticmethod
+    async def get_last_user_id(db: AsyncSession) -> int:
+        rs = await db.execute(text("SELECT MAX(id) FROM users"))
+        max_id = rs.scalar_one_or_none()
+        return max_id
 
-    def blacklist_token(self, token: str):
+    @staticmethod
+    async def blacklist_token(token: str, db: AsyncSession):
         """
         Add a token to the blacklist table with the current timestamp
         """
-        try:
-            cursor = self.cnx.cursor()
-            query = "INSERT INTO blacklist (token, blacklist_on) VALUES (%s, %s)"
-            timestamp = datetime.now()
+        black_list = Blacklist(token=token, blacklist_on=datetime.now())
+        db.add(black_list)
+        await db.commit()
+        await db.refresh(black_list)
+        return black_list
 
-            cursor.execute(query, [token, timestamp])
-
-            self.cnx.commit()
-            cursor.close()
-        except mysql.connector.Error as err:
-            print(err)
-
-    def is_token_blacklisted(self, token: str) -> bool:
+    @staticmethod
+    async def is_token_blacklisted(token: str, db: AsyncSession) -> bool:
         """
         Check if a token exists in the blacklist table
         """
-        try:
-            cursor = self.cnx.cursor()
-            query = "SELECT COUNT(*) FROM blacklist WHERE token = %s"
-            values = (token,)
-            cursor.execute(query, values)
-            result = cursor.fetchone()[0]
-            cursor.close()
-            return result > 0
-        except mysql.connector.Error as err:
-            print(err)
-            return False
+        result = await db.execute(select(Blacklist).filter(Blacklist.token == token))
+        black_list: Blacklist = result.scalars().one_or_none()
+        return black_list is not None

@@ -1,9 +1,14 @@
-from services.db_service import user_dao
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from dao.user_dao import UserDAO
 
 
-def add_token_to_blacklist(token: str):
-    user_dao.blacklist_token(token)
+class TokenService:
 
+    @staticmethod
+    async def add_token_to_blacklist(token: str, db: AsyncSession):
+        await UserDAO.blacklist_token(token, db)
 
-def check_if_token_is_blacklisted(token: str) -> bool:
-    return user_dao.is_token_blacklisted(token)
+    @staticmethod
+    async def check_if_token_is_blacklisted(token: str, db: AsyncSession) -> bool:
+        return await UserDAO.is_token_blacklisted(token, db)

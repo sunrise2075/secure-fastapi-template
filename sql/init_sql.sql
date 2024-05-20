@@ -1,3 +1,6 @@
+grant all privileges on *.* to 'fastapi_user'@'%';
+flush privileges;
+
 use fastapi;
 
 create table if not exists users
@@ -13,7 +16,9 @@ create table if not exists users
 create table if not exists blacklist
 (
     token        varchar(512) not null,
-    blacklist_on datetime     null
+    blacklist_on datetime     null,
+    id           bigint auto_increment
+        primary key
 );
 
 create table if not exists task
