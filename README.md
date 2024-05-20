@@ -106,9 +106,9 @@ create a user with `admin` as username and `123456` as password
 
 We need consider more issues as follows:
 
-1. connection pool
+1. connection pool `done`
 2. sql injection
-3. orm framework
+3. orm framework `done`
 4. http security config
 5. unit test
 6. code generation
