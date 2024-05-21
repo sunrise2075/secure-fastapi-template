@@ -102,7 +102,7 @@ http://127.0.0.1:8000/auth/login
 
 http://127.0.0.1:8000/docs
 
-create a user with `admin` as username and `123456` as password
+8. More considerations
 
 We need consider more issues as follows:
 
@@ -115,7 +115,15 @@ We need consider more issues as follows:
 7. app scale up
 8. db cluster mgmt
 
-https://www.geeksforgeeks.org/how-to-update-existing-table-rows-in-sqlalchemy-in-python/?ref=ml_lbp
+9. Tag and push app image
+
+    docker image tag secure-fastapi-template-app:latest sunrise2075/secure-fastapi-template-app:latest
+
+    docker push sunrise2075/secure-fastapi-template-app:latest
+
+    kubectl apply -f ./k8s
+
+    kubectl delete -f ./k8s
 
 ## Contributing
 
