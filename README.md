@@ -123,6 +123,8 @@ We need consider more issues as follows:
 
     kubectl apply -f ./k8s
 
+    kubectl port-forward service/app 8080:80
+
     kubectl delete -f ./k8s
 
 ## Contributing
