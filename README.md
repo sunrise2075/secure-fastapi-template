@@ -108,27 +108,40 @@ http://127.0.0.1:8000/docs
 
 We need consider more issues as follows:
 
-   1. connection pool `done`
-   2. sql injection
-   3. orm framework `done`
-   4. http security config
-   5. unit test
-   6. code generation
-   7. app scale up
-   8. db cluster mgmt
+   - connection pool `done`
+   - sql injection
+   - orm framework `done`
+   - http security config
+   - unit test
+   - code generation
+   - app scale up
+   - db cluster mgmt
 
 
-9. Tag and push app image
+9. Manage k8s cluster
 
-    docker image tag secure-fastapi-template-app:latest sunrise2075/secure-fastapi-template-app:latest
+Set up:
 
-    docker push sunrise2075/secure-fastapi-template-app:latest
+```bash
 
-    kubectl apply -f ./k8s
+docker login
 
-    kubectl port-forward service/app 8080:80
+docker image tag secure-fastapi-template-app:latest sunrise2075/secure-fastapi-template-app:latest
 
-    kubectl delete -f ./k8s
+docker push sunrise2075/secure-fastapi-template-app:latest
+
+kubectl apply -f ./k8s
+
+kubectl port-forward service/app 8080:80
+
+```
+
+Shut down:
+
+```bash
+kubectl delete -f ./k8s
+```
+
 
 ## Contributing
 
