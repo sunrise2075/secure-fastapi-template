@@ -124,9 +124,6 @@ docker login
 Set up:
 
 ```bash
-
-docker login
-
 docker image tag secure-fastapi-template-app:latest sunrise2075/secure-fastapi-template-app:latest
 
 docker push sunrise2075/secure-fastapi-template-app:latest
