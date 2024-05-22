@@ -33,19 +33,19 @@ It has OAuth2 authentication and JWT token generation. It also has a basic user 
 
 ### Installation Steps
 
-1. Clone the repository
+#### 1. Clone the repository
 
 ```bash
 git clone https://github.com/dilshankarunarathne/secure-fastapi-template.git
 ```
 
-2. Install the dependencies
+#### 2. Install the dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Create a MySQL database
+#### 3. Create a MySQL database
 
 ```bash
 mysql -u root -p
@@ -76,9 +76,7 @@ create table blacklist
 
 ```
 
-
-
-4. Create a `.env` file in the root directory and add the following environment variables
+#### 4. Create a `.env` file in the root directory and add the following environment variables
 
 ```bash
 MYSQL_USER="your mysql user"
@@ -88,37 +86,40 @@ MYSQL_DATABASE="fastapi"
 MYSQL_PORT=3306
 ```
 
-5. Run the project
+#### 5. Run the project
 
 ```bash
 uvicorn main:app --reload
 ```
 
-6. Open the local URL in a browser to access the Swagger UI
+#### 6. Open the local URL in a browser to access the Swagger UI
 
 ```bash
 http://127.0.0.1:8000/auth/login
 ```
 
-7. Open swagger ui via the following link:
+#### 7. Open swagger ui via the following link:
 
 http://127.0.0.1:8000/docs
 
-8. More considerations
+#### 8. More considerations
 
 We need consider more issues as follows:
 
-   - connection pool `done`
-   - sql injection
-   - orm framework `done`
-   - http security config
-   - unit test
-   - code generation
-   - app scale up
-   - db cluster mgmt
+- connection pool `done`
+- sql injection
+- orm framework `done`
+- http security config
+- unit test
+- code generation
+- app scale up
+- db cluster mgmt
 
+#### 9. Manage k8s cluster
 
-9. Manage k8s cluster
+```bash
+docker login
+````
 
 Set up:
 
@@ -137,7 +138,7 @@ kubectl port-forward service/app 8080:80
 ```
 
 Shut down:
-
+    
 ```bash
 kubectl delete -f ./k8s
 ```
