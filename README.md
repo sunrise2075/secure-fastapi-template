@@ -69,7 +69,9 @@ create table users
 create table blacklist
 (
     token        varchar(512) not null,
-    blacklist_on datetime     null
+    blacklist_on datetime     null,
+    id           bigint auto_increment
+        primary key
 );
 
 ```
@@ -106,14 +108,15 @@ http://127.0.0.1:8000/docs
 
 We need consider more issues as follows:
 
-1. connection pool `done`
-2. sql injection
-3. orm framework `done`
-4. http security config
-5. unit test
-6. code generation
-7. app scale up
-8. db cluster mgmt
+   1. connection pool `done`
+   2. sql injection
+   3. orm framework `done`
+   4. http security config
+   5. unit test
+   6. code generation
+   7. app scale up
+   8. db cluster mgmt
+
 
 9. Tag and push app image
 
