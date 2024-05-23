@@ -47,43 +47,50 @@ pip install -r requirements.txt
 
 #### 3. Create a MySQL database
 
-```bash
-mysql -u root -p
+```postgresql
+create database fastapi;
+GRANT ALL PRIVILEGES ON DATABASE fastapi TO fastapi_user;
 ```
 
-```sql
-CREATE DATABASE fastapi;
+```postgresql
+-- Switch to the fastapi database
+\c fastapi
 
-use fastapi;
-
-create table users
-(
-    id              int auto_increment
-        primary key,
-    username        varchar(256)         null,
-    email           varchar(256)         null,
-    is_admin        tinyint(1) default 0 null,
-    hashed_password varchar(512)         null
+-- Create tables
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(256),
+    email VARCHAR(256),
+    is_admin BOOLEAN DEFAULT FALSE,
+    hashed_password VARCHAR(512)
 );
 
-create table blacklist
-(
-    token        varchar(512) not null,
-    blacklist_on datetime     null,
-    id           bigint auto_increment
-        primary key
+CREATE TABLE IF NOT EXISTS blacklist (
+    token VARCHAR(512) NOT NULL,
+    blacklist_on TIMESTAMP,
+    id BIGSERIAL PRIMARY KEY
 );
+
+CREATE TABLE IF NOT EXISTS task (
+    task_id SERIAL PRIMARY KEY,
+    task VARCHAR(250) NOT NULL,
+    status VARCHAR(30) NOT NULL
+);
+
+-- Insert initial data into the task table
+INSERT INTO task (task, status) VALUES ('Read an article on React.js', 'Done');
+INSERT INTO task (task, status) VALUES ('Organize a meeting', 'Pending');
 
 ```
 
 #### 4. Create a `.env` file in the root directory and add the following environment variables
 
 ```bash
-MYSQL_USER="your mysql user"
-MYSQL_PASSWORD="your mysql password"
-MYSQL_HOST="localhost"
-MYSQL_DATABASE="fastapi"
-MYSQL_PORT=3306
+PGSQL_USER="your mysql user"
+PGSQL_PASSWORD="your mysql password"
+PGSQL_HOST="localhost"
+PGSQL_DATABASE="fastapi"
+PGSQL_PORT=5432
 ```
 
 #### 5. Run the project
