@@ -63,6 +63,9 @@ async def get_all_task(id: int, current_user: Annotated[User, Depends(get_curren
     if current_user is not None:
         result = await db.execute(select(Task).filter(Task.task_id == id))
         task: Task = result.scalars().first()
-        return Task(task_id=task.task_id, task=task.task, status=task.status)
+        if task is not None:
+            return Task(task_id= task.task_id, task=task.task, status=task.status)
+        else:
+            return None
     else:
         return None
