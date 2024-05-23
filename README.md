@@ -122,9 +122,9 @@ Login as an user Docker Hub:
 ```bash
 docker login
 
-docker image tag secure-fastapi-template-app:latest sunrise2075/secure-fastapi-template-app:latest
+docker image tag secure-fastapi-template-app:latest sunrise2075/secure-fastapi-template-app:2.0
 
-docker push sunrise2075/secure-fastapi-template-app:latest
+docker push sunrise2075/secure-fastapi-template-app:2.0
 ````
 
 Test the process of docker composing after removing all prebuilt image: 
