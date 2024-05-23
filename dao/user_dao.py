@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Optional
 
-import mysql.connector
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 

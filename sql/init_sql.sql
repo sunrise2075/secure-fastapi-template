@@ -1,33 +1,29 @@
-grant all privileges on *.* to 'fastapi_user'@'%';
-flush privileges;
+GRANT ALL PRIVILEGES ON DATABASE fastapi TO fastapi_user;
 
-use fastapi;
+-- Switch to the fastapi database
+\c fastapi
 
-create table if not exists users
-(
-    id              int auto_increment
-        primary key,
-    username        varchar(256)         null,
-    email           varchar(256)         null,
-    is_admin        tinyint(1) default 0 null,
-    hashed_password varchar(512)         null
+-- Create tables
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(256),
+    email VARCHAR(256),
+    is_admin BOOLEAN DEFAULT FALSE,
+    hashed_password VARCHAR(512)
 );
 
-create table if not exists blacklist
-(
-    token        varchar(512) not null,
-    blacklist_on datetime     null,
-    id           bigint auto_increment
-        primary key
+CREATE TABLE IF NOT EXISTS blacklist (
+    token VARCHAR(512) NOT NULL,
+    blacklist_on TIMESTAMP,
+    id BIGSERIAL PRIMARY KEY
 );
 
-create table if not exists task
-(
-    task_id int auto_increment
-        primary key,
-    task    varchar(250) not null,
-    status  varchar(30)  not null
+CREATE TABLE IF NOT EXISTS task (
+    task_id SERIAL PRIMARY KEY,
+    task VARCHAR(250) NOT NULL,
+    status VARCHAR(30) NOT NULL
 );
 
-INSERT INTO fastapi.task (task_id, task, status) VALUES (1, 'Read an article on React.js', 'Done');
-INSERT INTO fastapi.task (task_id, task, status) VALUES (2, 'Organize a meeting', 'Pending');
+-- Insert initial data into the task table
+INSERT INTO task (task, status) VALUES ('Read an article on React.js', 'Done');
+INSERT INTO task (task, status) VALUES ('Organize a meeting', 'Pending');

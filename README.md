@@ -117,16 +117,30 @@ We need consider more issues as follows:
 
 #### 9. Manage k8s cluster
 
+Login as an user Docker Hub:
+
 ```bash
 docker login
+
+docker image tag secure-fastapi-template-app:latest sunrise2075/secure-fastapi-template-app:latest
+
+docker push sunrise2075/secure-fastapi-template-app:latest
 ````
+
+Test the process of docker composing after removing all prebuilt image: 
+
+```bash
+docker-compose up --force-recreate
+```
+
+Convert into k8s files in ./k8s:
+```bash
+kcompose convert --out ./k8s
+```
 
 Set up:
 
 ```bash
-docker image tag secure-fastapi-template-app:latest sunrise2075/secure-fastapi-template-app:latest
-
-docker push sunrise2075/secure-fastapi-template-app:latest
 
 kubectl apply -f ./k8s
 

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert
+    kompose.cmd: kompose convert --out ./k8s
     kompose.version: 1.33.0 (HEAD)
   labels:
     io.kompose.service: app
@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert
+        kompose.cmd: kompose convert --out ./k8s
         kompose.version: 1.33.0 (HEAD)
       labels:
         io.kompose.network/secure-fastapi-template-default: "true"
@@ -24,8 +24,8 @@ spec:
       containers:
         - env:
             - name: DATABASE_URL
-              value: mysql+aiomysql://fastapi_user:test12345@db/fastapi
-          image: sunrise2075/secure-fastapi-template-app:latest
+              value: postgresql+asyncpg://fastapi_user:test12345@db:5432/fastapi
+          image: app
           name: app
           ports:
             - containerPort: 80

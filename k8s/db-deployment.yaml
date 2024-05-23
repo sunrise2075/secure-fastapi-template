@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert
+    kompose.cmd: kompose convert --out ./k8s
     kompose.version: 1.33.0 (HEAD)
   labels:
     io.kompose.service: db
@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert
+        kompose.cmd: kompose convert --out ./k8s
         kompose.version: 1.33.0 (HEAD)
       labels:
         io.kompose.network/secure-fastapi-template-default: "true"
@@ -25,33 +25,31 @@ spec:
     spec:
       containers:
         - env:
-            - name: MYSQL_DATABASE
+            - name: POSTGRES_DB
               value: fastapi
-            - name: MYSQL_PASSWORD
+            - name: POSTGRES_PASSWORD
               value: test12345
-            - name: MYSQL_ROOT_PASSWORD
-              value: root12345
-            - name: MYSQL_USER
+            - name: POSTGRES_USER
               value: fastapi_user
-          image: mysql:8.0
+          image: postgres:13
           livenessProbe:
             exec:
               command:
-                - mysqladmin
-                - ping
-                - -h
-                - localhost
-            failureThreshold: 10
-            timeoutSeconds: 20
-          name: db
+                - pg_isready -U fastapi_user -d fastapi
+            failureThreshold: 5
+            periodSeconds: 30
+            timeoutSeconds: 10
+          name: postgres-db
           ports:
-            - containerPort: 3306
-              hostPort: 3306
+            - containerPort: 5432
+              hostPort: 5432
               protocol: TCP
           volumeMounts:
             - mountPath: /docker-entrypoint-initdb.d/init_sql.sql
               name: db-cm0
               subPath: init_sql.sql
+            - mountPath: /var/lib/postgresql/data
+              name: pgdata
       restartPolicy: Always
       volumes:
         - configMap:
@@ -60,3 +58,6 @@ spec:
                 path: init_sql.sql
             name: db-cm0
           name: db-cm0
+        - name: pgdata
+          persistentVolumeClaim:
+            claimName: pgdata

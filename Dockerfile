@@ -31,5 +31,5 @@ EXPOSE 80
 ENV PYTHONUNBUFFERED=1
 
 # Run the application
-CMD ["/app/script/wait-for-it.sh", "db:3306", "--", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["/app/script/wait-for-it.sh", "db:5432", "--", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
 

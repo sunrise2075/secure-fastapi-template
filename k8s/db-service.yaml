@@ -2,15 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: kompose convert
+    kompose.cmd: kompose convert --out ./k8s
     kompose.version: 1.33.0 (HEAD)
   labels:
     io.kompose.service: db
   name: db
 spec:
   ports:
-    - name: "3306"
-      port: 3306
-      targetPort: 3306
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
   selector:
     io.kompose.service: db

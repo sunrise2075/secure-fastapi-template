@@ -2,29 +2,35 @@ version: "3.8"
 
 services:
   db:
-    image: mysql:8.0
+    image: postgres:13  # Specify the version of PostgreSQL you want to use
+    container_name: postgres_db  # Optional: name the container
     environment:
-      MYSQL_ROOT_PASSWORD: root12345
-      MYSQL_USER: fastapi_user
-      MYSQL_PASSWORD: test12345
-      MYSQL_DATABASE: fastapi
+      POSTGRES_USER: fastapi_user  # Username for the PostgreSQL database
+      POSTGRES_PASSWORD: test12345  # Password for the PostgreSQL database
+      POSTGRES_DB: fastapi  # Name of the database to be created
     ports:
-      - "3306:3306"
-    healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      timeout: 20s
-      retries: 10
+      - "5432:5432"  # Expose PostgreSQL on the host machine's port 5432
     volumes:
       - ./sql/init_sql.sql:/docker-entrypoint-initdb.d/init_sql.sql
+      - pgdata:/var/lib/postgresql/data  # Persist data to a Docker volume
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fastapi_user -d fastapi"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   app:
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      DATABASE_URL: mysql+aiomysql://fastapi_user:test12345@db/fastapi
+      DATABASE_URL: postgresql+asyncpg://fastapi_user:test12345@db:5432/fastapi
     ports:
       - "80:80"
     depends_on:
       db:
         condition: service_healthy
+
+volumes:
+    pgdata:
+      driver: local  # Use a local driver for volume
