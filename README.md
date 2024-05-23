@@ -24,12 +24,17 @@ It has OAuth2 authentication and JWT token generation. It also has a basic user 
 
 - Python 3.8 or higher
 - pip 20.0 or higher
-- fastapi
-- uvicorn
-- pydantic
-- jose
-- passlib
-- mysql
+- fastapi~=0.109.1
+- pydantic~=2.3.0
+- passlib~=1.7.4
+- python-jose~=3.3.0
+- bcrypt~=4.1.3
+- python-multipart~=0.0.9
+- uvicorn~=0.29.0
+- sqlalchemy~=2.0.3
+- cryptography
+- asyncpg
+- databases
 
 ### Installation Steps
 
@@ -45,7 +50,7 @@ git clone https://github.com/dilshankarunarathne/secure-fastapi-template.git
 pip install -r requirements.txt
 ```
 
-#### 3. Create a MySQL database
+#### 3. Create a PGSQL database
 
 ```postgresql
 create database fastapi;
@@ -86,8 +91,8 @@ INSERT INTO task (task, status) VALUES ('Organize a meeting', 'Pending');
 #### 4. Create a `.env` file in the root directory and add the following environment variables
 
 ```bash
-PGSQL_USER="your mysql user"
-PGSQL_PASSWORD="your mysql password"
+PGSQL_USER="your db user"
+PGSQL_PASSWORD="your db password"
 PGSQL_HOST="localhost"
 PGSQL_DATABASE="fastapi"
 PGSQL_PORT=5432
