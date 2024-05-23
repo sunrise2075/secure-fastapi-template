@@ -58,4 +58,10 @@ Then you can use api endpoints on `localhost:8000`
 
 ![img_1.png](images/local_app_azure_db_startup.png)
 
-# Create docker image of your app ang push to `Use Azure Container Registry`
+# Create `Azure Container App`
+
+Refer to this link, you can create a `Azure Container App` from given `GitHub` repo.
+
+Build and deploy from a repository to Azure Container Apps:
+
+https://learn.microsoft.com/en-us/azure/container-apps/quickstart-repo-to-cloud?tabs=bash%2Ccsharp&pivots=with-dockerfile#prepare-the-github-repository
